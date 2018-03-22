@@ -503,7 +503,7 @@ def find_graphviz():
                             #print "Used Windows registry"
                             return progs
                 
-                except Exception, excp:
+                except Exception as excp:
                     #raise excp
                     pass
                 else:
