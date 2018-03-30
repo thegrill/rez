@@ -212,7 +212,7 @@ class SourceCode(object):
         pyc = self.compiled
 
         try:
-            exec(pyc, globals())
+            exec(pyc, globals_)
         except Exception as e:
             stack = traceback.format_exc()
             raise SourceCodeExecError(
@@ -315,7 +315,7 @@ class IncludeModuleManager(object):
             with open(filepath) as f:
                 txt = f.read().strip()
 
-            hash_str = sha1(txt).hexdigest()
+            hash_str = sha1(txt.encode() if hasattr(txt, 'encode') else txt).hexdigest()
         else:
             # load sourcefile that's been copied into package install payload
             path = os.path.join(package.base, self.include_modules_subpath)

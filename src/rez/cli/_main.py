@@ -95,6 +95,7 @@ def run(command=None):
 
     # parse args, but split extras into groups separated by "--"
     all_args = ([command] + sys.argv[1:]) if command else sys.argv[1:]
+    print(f'all_args: {all_args}')
     arg_groups = [[]]
     for arg in all_args:
         if arg == '--':

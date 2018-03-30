@@ -97,6 +97,8 @@ class CMD(Shell):
                   stderr=subprocess.PIPE, shell=True)
         out_, _ = p.communicate()
         out_ = out_.strip()
+        # comes as bytes in python 3.6
+        out_ = out_.decode() if hasattr(out_, 'decode') else out_
 
         if p.returncode == 0:
             match = re.match(expected, out_)
@@ -122,6 +124,7 @@ class CMD(Shell):
                   stderr=subprocess.PIPE, shell=True)
         out_, _ = p.communicate()
         out_ = out_.strip()
+        out_ = out_.decode() if hasattr(out_, 'decode') else out_
 
         if p.returncode == 0:
             match = re.match(expected, out_)

@@ -173,7 +173,7 @@ class LocalBuildProcess(BuildProcessHelper):
             with open(filepath) as f:
                 txt = f.read().strip()
 
-            uuid = sha1(txt).hexdigest()
+            uuid = sha1(txt.encode() if hasattr(txt, 'encode') else txt).hexdigest()
             dest_filepath = os.path.join(path, "%s-%s.py" % (name, uuid))
 
             shutil.copy(filepath, dest_filepath)
