@@ -818,7 +818,8 @@ class FileSystemPackageRepository(PackageRepository):
         # special case - installing a no-variant pkg into a no-variant pkg
         if existing_package and variant.index is None:
             if dry_run and not package_changed:
-                variant_ = self.iter_variants(existing_package).next()
+                # variant_ = self.iter_variants(existing_package).next()
+                variant_ = next(self.iter_variants(existing_package))
                 return variant_
             else:
                 # just replace the package

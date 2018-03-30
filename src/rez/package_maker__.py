@@ -94,6 +94,8 @@ class PackageMaker(AttrDictWrapper):
         """
         # get and validate package data
         package_data = self._get_data()
+        from pprint import pformat
+        print(pformat(package_data))
         package_data = package_schema.validate(package_data)
 
         # check compatibility with rez version
@@ -129,6 +131,8 @@ class PackageMaker(AttrDictWrapper):
         data.pop("package_cls", None)
 
         data = dict((k, v) for k, v in data.items() if v is not None)
+        # TODO: implement this on the schema API, py3 gets bytes all over the place
+        data = {k: v.decode() if hasattr(v, 'decode') else v for k, v in data.items()}
         return data
 
 

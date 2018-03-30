@@ -223,7 +223,7 @@ class ResourcePool(object):
         return resource_class(resource_handle.variables)
 
 
-class ResourceWrapper(object):
+class ResourceWrapper(object, metaclass=AttributeForwardMeta):
     """An object that wraps a resource instance.
 
     A resource wrapper is useful for two main reasons. First, we can wrap
@@ -241,7 +241,7 @@ class ResourceWrapper(object):
     the resource that you want to expose in the wrapper. The `schema_keys`
     function is provided to help get a list of keys from a resource schema.
     """
-    __metaclass__ = AttributeForwardMeta
+    # __metaclass__ = AttributeForwardMeta
     keys = None
 
     def __init__(self, resource):

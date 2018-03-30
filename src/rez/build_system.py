@@ -51,7 +51,7 @@ def create_build_system(working_dir, buildsys_type=None, package=None, opts=None
             raise BuildSystemError(("Source could be built with one of: %s; "
                                    "Please specify a build system") % s)
         else:
-            cls = iter(clss).next()
+            cls = next(iter(clss), None)
             return cls(working_dir,
                        opts=opts,
                        package=package,

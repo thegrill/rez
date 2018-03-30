@@ -59,7 +59,9 @@ def bind(path, version_range=None, opts=None, parser=None):
                 pypath = os.path.dirname(pypath)
 
             if pypath not in builtin_paths.values():
-                builtin_paths[dirname] = pypath
+                # TODO: not good, remove, thanks
+                dirname = dirname.decode() if hasattr(dirname, 'decode') else dirname
+                builtin_paths[dirname] = pypath.decode() if hasattr(pypath, 'decode') else pypath
 
     # make the package
     #

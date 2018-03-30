@@ -97,7 +97,8 @@ def extract_version(exepath, version_arg, word_index=-1, version_rank=3):
     if returncode:
         raise RezBindError("failed to execute %s: %s\n(error code %d)"
                            % (exepath, stderr, returncode))
-
+    # TODO: not good, remove, thanks
+    stdout = stdout.decode() if hasattr(stdout, 'decode') else stdout
     stdout = stdout.strip().split('\n')[0].strip()
     log("extracting version from output: '%s'" % stdout)
 

@@ -143,16 +143,30 @@ def load_py(stream, filepath=None):
              include=include,
              ModifyList=ModifyList,
              InvalidPackageError=InvalidPackageError)
+    from io import TextIOWrapper
+    from functools import partial
+    import os
 
+    def run_py_file(path):
+        import runpy
+        file_globals = runpy.run_path(path)
+        g.update(file_globals)
+
+    if isinstance(stream, TextIOWrapper) and os.path.exists(stream.name):
+        func = partial(run_py_file, stream.name)
+    else:
+        func = partial(exec, stream, g)
     try:
-        exec(stream, g)
+        func()
     except Exception as e:
+        from pprint import pprint, pformat
+        pprint(locals())
         import traceback
         frames = traceback.extract_tb(sys.exc_info()[2])
         while filepath and frames and frames[0][0] != filepath:
             frames = frames[1:]
 
-        msg = "Problem loading %s: %s" % (filepath, str(e))
+        msg = "Problem loading %s: %s \n %s" % (filepath, str(e), pformat(locals()))
         stack = ''.join(traceback.format_list(frames)).strip()
         if stack:
             msg += ":\n" + stack
@@ -271,7 +285,7 @@ def process_python_objects(data, filepath=None):
 
     def _trim(value):
         if isinstance(value, dict):
-            for k, v in value.items():
+            for k, v in list(value.items()):
                 if isfunction(v):
                     if v.__name__ == "preprocess":
                         # preprocess is a special case. It has to stay intact

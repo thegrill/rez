@@ -29,13 +29,20 @@ def commands_with_bin():
 
 
 def copy_module(name, destpath):
+    # TODO: not good, remove, thanks
+    name = name.decode() if hasattr(name, 'decode') else name
+    destpath = destpath.decode() if hasattr(destpath, 'decode') else destpath
     success, out, err = run_python_command(
         ["import %s" % name,
          "print(%s.__path__[0] if hasattr(%s, '__path__') else '')" % (name, name)])
 
     if out:
         srcpath = out
-        shutil.copytree(srcpath, os.path.join(destpath, name))
+        # TODO: not good, remove, thanks
+        srcpath = srcpath.decode() if hasattr(srcpath, 'decode') else srcpath
+        tgtpath = os.path.join(destpath, name)
+        tgtpath = tgtpath.decode() if hasattr(tgtpath, 'decode') else tgtpath
+        shutil.copytree(srcpath, tgtpath)
     else:
         success, out, err = run_python_command(
             ["import %s" % name,
@@ -52,6 +59,9 @@ def copy_module(name, destpath):
                 srcfile = pyfile
 
         destfile = os.path.join(destpath, os.path.basename(srcfile))
+        # TODO: not good, remove, thanks
+        srcfile = srcfile.decode() if hasattr(srcfile, 'decode') else srcfile
+        destfile = destfile.decode() if hasattr(destfile, 'decode') else destfile
         shutil.copy2(srcfile, destfile)
 
 
@@ -82,7 +92,9 @@ def bind(name, path, import_name=None, version_range=None, version=None,
     for tool in (tools or []):
         try:
             src = find_exe(tool)
-            found_tools[tool] = src
+            # TODO: not good, remove, thanks
+            tool = tool.decode() if hasattr(tool, 'decode') else tool
+            found_tools[tool] = src.decode() if hasattr(src, 'decode') else src
             log("found tool '%s': %s" % (tool, src))
         except RezBindError as e:
             print_warning(str(e))

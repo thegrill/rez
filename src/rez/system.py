@@ -124,7 +124,7 @@ class System(object):
             elif (shell not in shells) and ("bash" in shells):
                 shell = "bash"  # failed detection, fall back on 'bash'
             elif shell not in shells:
-                shell = iter(shells).next()  # give up - just choose a shell
+                shell = next(iter(shells), None)  # give up - just choose a shell
 
             # sh has to be handled as a special case
             if shell == "sh":

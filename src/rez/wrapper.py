@@ -212,7 +212,7 @@ class Wrapper(object):
             if len(variants) > 1:
                 self._print_conflicting(variants)
             else:
-                variant = iter(variants).next()
+                variant = next(iter(variants), None)
                 print("Package:  %s" % variant.qualified_package_name)
         return 0
 
