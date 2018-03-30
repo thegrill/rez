@@ -15,7 +15,7 @@ from rez.vendor.enum import Enum
 from rez.vendor import yaml
 from contextlib import contextmanager
 from inspect import isfunction, ismodule, getargspec
-from StringIO import StringIO
+from io import StringIO
 import sys
 import os
 import os.path
@@ -145,7 +145,7 @@ def load_py(stream, filepath=None):
              InvalidPackageError=InvalidPackageError)
 
     try:
-        exec stream in g
+        exec(stream, g)
     except Exception as e:
         import traceback
         frames = traceback.extract_tb(sys.exc_info()[2])
@@ -162,7 +162,7 @@ def load_py(stream, filepath=None):
     excludes = set(('scope', 'InvalidPackageError', '__builtins__',
                     'early', 'late', 'include', 'ModifyList'))
 
-    for k, v in g.iteritems():
+    for k, v in g.items():
         if k not in excludes and \
                 (k not in __builtins__ or __builtins__[k] != v):
             result[k] = v

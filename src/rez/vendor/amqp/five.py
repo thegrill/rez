@@ -19,15 +19,9 @@ try:
 except NameError:                           # pragma: no cover
     from imp import reload                  # noqa
 
-try:
-    from UserList import UserList           # noqa
-except ImportError:                         # pragma: no cover
-    from collections import UserList        # noqa
+UserList = list
 
-try:
-    from UserDict import UserDict           # noqa
-except ImportError:                         # pragma: no cover
-    from collections import UserDict        # noqa
+UserDict = dict
 
 
 if PY3:
@@ -88,13 +82,13 @@ else:
     open_fqdn = '__builtin__.open'
 
     def items(d):                   # noqa
-        return d.iteritems()
+        return d.items()
 
     def keys(d):                    # noqa
-        return d.iterkeys()
+        return d.keys()
 
     def values(d):                  # noqa
-        return d.itervalues()
+        return d.values()
 
     def nextfun(it):                # noqa
         return it.next
@@ -109,7 +103,7 @@ else:
             del frame
         elif locs is None:
             locs = globs
-        exec("""exec code in globs, locs""")
+        exec("""exec(code, globs, locs)""")
 
     exec_("""def reraise(tp, value, tb=None): raise tp, value, tb""")
 

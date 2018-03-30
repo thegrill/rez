@@ -41,17 +41,17 @@ package_key_order = [
     'previous_revision']
 
 
-version_schema = Or(basestring, And(Version, Use(str)))
+version_schema = Or(str, And(Version, Use(str)))
 
-package_request_schema = Or(basestring, And(PackageRequest, Use(str)))
+package_request_schema = Or(str, And(PackageRequest, Use(str)))
 
-source_code_schema = Or(SourceCode, And(basestring, Use(SourceCode)))
+source_code_schema = Or(SourceCode, And(str, Use(SourceCode)))
 
 tests_schema = Schema({
-    Optional(basestring): Or(
-        Or(basestring, [basestring]),
+    Optional(str): Or(
+        Or(str, [str]),
         {
-            "command": Or(basestring, [basestring]),
+            "command": Or(str, [str]),
             Optional("requires"): [package_request_schema]
         }
     )
@@ -60,11 +60,11 @@ tests_schema = Schema({
 
 # package serialisation schema
 package_serialise_schema = Schema({
-    Required("name"):                   basestring,
+    Required("name"):                   str,
     Optional("version"):                version_schema,
-    Optional("description"):            basestring,
-    Optional("authors"):                [basestring],
-    Optional("tools"):                  late_bound([basestring]),
+    Optional("description"):            str,
+    Optional("authors"):                [str],
+    Optional("tools"):                  late_bound([str]),
 
     Optional('requires'):               late_bound([package_request_schema]),
     Optional('build_requires'):         late_bound([package_request_schema]),
@@ -77,19 +77,19 @@ package_serialise_schema = Schema({
     Optional('post_commands'):          source_code_schema,
 
     Optional("help"):                   late_bound(help_schema),
-    Optional("uuid"):                   basestring,
+    Optional("uuid"):                   str,
     Optional("config"):                 dict,
 
     Optional('tests'):                  late_bound(tests_schema),
 
     Optional("timestamp"):              int,
     Optional('revision'):               object,
-    Optional('changelog'):              basestring,
-    Optional('release_message'):        Or(None, basestring),
+    Optional('changelog'):              str,
+    Optional('release_message'):        Or(None, str),
     Optional('previous_version'):       version_schema,
     Optional('previous_revision'):      object,
 
-    Optional(basestring):               object
+    Optional(str):               object
 })
 
 
@@ -105,7 +105,7 @@ def dump_package_data(data, buf, format_=FileFormat.py, skip_attributes=None):
     if format_ == FileFormat.txt:
         raise ValueError("'txt' format not supported for packages.")
 
-    data_ = dict((k, v) for k, v in data.iteritems() if v is not None)
+    data_ = dict((k, v) for k, v in data.items() if v is not None)
     data_ = package_serialise_schema.validate(data_)
     skip = set(skip_attributes or [])
 
@@ -117,7 +117,7 @@ def dump_package_data(data, buf, format_=FileFormat.py, skip_attributes=None):
                 items.append((key, value))
 
     # remaining are arbitrary keys
-    for key, value in data_.iteritems():
+    for key, value in data_.items():
         if key not in skip:
             items.append((key, value))
 

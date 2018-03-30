@@ -112,7 +112,10 @@ def bind_package(name, path=None, version_range=None, no_deps=False,
                                           version_range=version_range,
                                           bind_args=bind_args,
                                           quiet=quiet)
-            except exc_type as e:
+            except Exception as e:
+                raise
+                if exc_type and not isinstance(e, exc_type):
+                    raise
                 print_error("Could not bind '%s': %s: %s"
                             % (name_, e.__class__.__name__, str(e)))
                 continue
@@ -150,9 +153,12 @@ def _bind_package(name, path=None, version_range=None, bind_args=None,
         raise RezBindError("Bind module not found for '%s'" % name)
 
     # load the bind module
-    stream = open(bindfile)
+    import runpy
+    file_globals = runpy.run_path(bindfile)
+    # stream = open(bindfile).read()
     namespace = {}
-    exec stream in namespace
+    namespace.update(file_globals)
+    # exec(stream, namespace)
 
     # parse bind module params
     bind_parser = argparse.ArgumentParser(prog="rez bind %s" % name,

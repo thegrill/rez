@@ -194,7 +194,6 @@ def get_cli_output(args):
     """
 
     import sys
-    from StringIO import StringIO
 
     command = args[0]
     other_args = list(args[1:])

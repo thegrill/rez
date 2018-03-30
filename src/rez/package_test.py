@@ -160,7 +160,7 @@ class PackageTestRunner(object):
             requires = test_info["requires"]
 
             # expand refs like {root} in commands
-            if isinstance(command, basestring):
+            if isinstance(command, str):
                 command = variant.format(command)
             else:
                 command = map(variant.format, command)
@@ -198,7 +198,7 @@ class PackageTestRunner(object):
             if self.verbose:
                 context.print_info(self.stdout)
 
-                if isinstance(command, basestring):
+                if isinstance(command, str):
                     cmd_str = command
                 else:
                     cmd_str = ' '.join(map(quote, command))

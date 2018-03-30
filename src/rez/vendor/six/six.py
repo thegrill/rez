@@ -543,33 +543,33 @@ get_function_globals = operator.attrgetter(_func_globals)
 
 
 if PY3:
-    def iterkeys(d, **kw):
+    def keys(d, **kw):
         return iter(d.keys(**kw))
 
-    def itervalues(d, **kw):
+    def values(d, **kw):
         return iter(d.values(**kw))
 
-    def iteritems(d, **kw):
+    def items(d, **kw):
         return iter(d.items(**kw))
 
     def iterlists(d, **kw):
         return iter(d.lists(**kw))
 else:
-    def iterkeys(d, **kw):
-        return iter(d.iterkeys(**kw))
+    def keys(d, **kw):
+        return iter(d.keys(**kw))
 
-    def itervalues(d, **kw):
-        return iter(d.itervalues(**kw))
+    def values(d, **kw):
+        return iter(d.values(**kw))
 
-    def iteritems(d, **kw):
-        return iter(d.iteritems(**kw))
+    def items(d, **kw):
+        return iter(d.items(**kw))
 
     def iterlists(d, **kw):
         return iter(d.iterlists(**kw))
 
-_add_doc(iterkeys, "Return an iterator over the keys of a dictionary.")
-_add_doc(itervalues, "Return an iterator over the values of a dictionary.")
-_add_doc(iteritems,
+_add_doc(keys, "Return an iterator over the keys of a dictionary.")
+_add_doc(values, "Return an iterator over the values of a dictionary.")
+_add_doc(items,
          "Return an iterator over the (key, value) pairs of a dictionary.")
 _add_doc(iterlists,
          "Return an iterator over the (key, [values]) pairs of a dictionary.")
@@ -635,7 +635,7 @@ else:
             del frame
         elif _locs_ is None:
             _locs_ = _globs_
-        exec("""exec _code_ in _globs_, _locs_""")
+        exec("""exec(_code_, _globs_, _locs_)""")
 
 
     exec_("""def reraise(tp, value, tb=None):

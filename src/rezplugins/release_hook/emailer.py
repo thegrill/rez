@@ -18,12 +18,12 @@ import sys
 class EmailReleaseHook(ReleaseHook):
 
     schema_dict = {
-        "subject":          basestring,
-        "body":             basestring,
-        "smtp_host":        basestring,
+        "subject":          str,
+        "body":             str,
+        "smtp_host":        str,
         "smtp_port":        int,
-        "sender":           basestring,
-        "recipients":       Or(basestring, [basestring])}
+        "sender":           str,
+        "recipients":       Or(str, [str])}
 
     @classmethod
     def name(cls):
@@ -126,7 +126,7 @@ class EmailReleaseHook(ReleaseHook):
             match = True
 
             if filters:
-                for attr, test_value in test(filters, dict).iteritems():
+                for attr, test_value in test(filters, dict).items():
 
                     missing = object()
                     value = getattr(self.package, attr, missing)

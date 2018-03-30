@@ -104,7 +104,7 @@ class RezPluginType(object):
         # extend_path, above). this means that `walk_packages` will walk over all
         # modules on the search path at the same level (.e.g in a
         # 'rezplugins/type_name' sub-directory).
-        paths = [package.__path__] if isinstance(package.__path__, basestring) \
+        paths = [package.__path__] if isinstance(package.__path__, str) \
             else package.__path__
         for path in paths:
             for loader, modname, ispkg in pkgutil.walk_packages(
@@ -177,7 +177,7 @@ class RezPluginType(object):
         from rez.config import _plugin_config_dict
         d = _plugin_config_dict.get(self.type_name, {})
 
-        for name, plugin_class in self.plugin_classes.iteritems():
+        for name, plugin_class in self.plugin_classes.items():
             if hasattr(plugin_class, "schema_dict") \
                     and plugin_class.schema_dict:
                 d_ = {name: plugin_class.schema_dict}

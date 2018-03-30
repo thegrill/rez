@@ -227,7 +227,7 @@ class FileSystemPackageResource(PackageResourceHelper):
                 if changed:
                     data["changelog"] = changelog
         else:
-            assert isinstance(data, basestring)
+            assert isinstance(data, str)
             if len(data) > (maxlen + 3):
                 data = data[:maxlen] + "..."
 
@@ -255,9 +255,9 @@ class FileSystemCombinedPackageFamilyResource(PackageFamilyResource):
     repository_type = "filesystem"
 
     schema = Schema({
-        Optional("versions"):               [And(basestring,
+        Optional("versions"):               [And(str,
                                                  Use(Version))],
-        Optional("version_overrides"):      {And(basestring,
+        Optional("version_overrides"):      {And(str,
                                                  Use(VersionRange)): dict}
     })
 
@@ -362,7 +362,7 @@ class FileSystemCombinedPackageResource(PackageResourceHelper):
 
             overrides = self.parent.version_overrides
             if overrides:
-                for range_, data_ in overrides.iteritems():
+                for range_, data_ in overrides.items():
                     if version in range_:
                         data.update(data_)
                 del data["version_overrides"]
@@ -429,7 +429,7 @@ class FileSystemPackageRepository(PackageRepository):
     """
     schema_dict = {"file_lock_timeout": int,
                    "file_lock_dir": Or(None, str),
-                   "package_filenames": [basestring]}
+                   "package_filenames": [str]}
 
     building_prefix = ".building"
 
@@ -893,7 +893,7 @@ class FileSystemPackageRepository(PackageRepository):
         package_data["format_version"] = format_version
 
         # apply attribute overrides
-        for key, value in overrides.iteritems():
+        for key, value in overrides.items():
             if package_data.get(key) is None:
                 package_data[key] = value
 

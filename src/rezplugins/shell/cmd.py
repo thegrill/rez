@@ -199,7 +199,7 @@ class CMD(Shell):
 
         cmd = []
         if pre_command:
-            if isinstance(pre_command, basestring):
+            if isinstance(pre_command, str):
                 cmd = pre_command.strip().split()
             else:
                 cmd = pre_command

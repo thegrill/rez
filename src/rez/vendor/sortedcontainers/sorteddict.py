@@ -183,7 +183,7 @@ class SortedDict(dict):
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return self.__class__(self._key, self._iteritems())
+        return self.__class__(self._key, self._items())
 
     __copy__ = copy
 
@@ -199,7 +199,7 @@ class SortedDict(dict):
             """
             Return a list of the dictionary's items (``(key, value)`` pairs).
             """
-            return list(self._iteritems())
+            return list(self._items())
     else:
         def items(self):
             """
@@ -209,7 +209,7 @@ class SortedDict(dict):
             """
             return ItemsView(self)
 
-    def iteritems(self):
+    def items(self):
         """
         Return an iterator over the items (``(key, value)`` pairs).
 
@@ -218,7 +218,7 @@ class SortedDict(dict):
         """
         return iter((key, self[key]) for key in self._list)
 
-    _iteritems = iteritems
+    _items = items
 
     if hexversion < 0x03000000:
         def keys(self):
@@ -233,7 +233,7 @@ class SortedDict(dict):
             """
             return KeysView(self)
 
-    def iterkeys(self):
+    def keys(self):
         """
         Return an iterator over the sorted keys of the Mapping.
 
@@ -245,7 +245,7 @@ class SortedDict(dict):
     if hexversion < 0x03000000:
         def values(self):
             """Return a list of the dictionary's values."""
-            return list(self._itervalues())
+            return list(self._values())
     else:
         def values(self):
             """
@@ -255,7 +255,7 @@ class SortedDict(dict):
             """
             return ValuesView(self)
 
-    def itervalues(self):
+    def values(self):
         """
         Return an iterator over the values of the Mapping.
 
@@ -264,7 +264,7 @@ class SortedDict(dict):
         """
         return iter(self[key] for key in self._list)
 
-    _itervalues = itervalues
+    _values = values
 
     def pop(self, key, default=NONE):
         """
@@ -368,7 +368,7 @@ class SortedDict(dict):
             return ItemsView(self)
 
     def __reduce__(self):
-        return (self.__class__, (self._key, list(self._iteritems())))
+        return (self.__class__, (self._key, list(self._items())))
 
     @recursive_repr
     def __repr__(self):
@@ -580,7 +580,7 @@ class ValuesView(AbstractValuesView, Sequence):
     if hexversion < 0x03000000:
         def count(self, value):
             """Return the number of occurrences of *value* in self."""
-            return sum(1 for val in self._dict.itervalues() if val == value)
+            return sum(1 for val in self._dict.values() if val == value)
     else:
         def count(self, value):
             """Return the number of occurrences of *value* in self."""

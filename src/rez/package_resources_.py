@@ -44,8 +44,8 @@ package_rex_keys = (
 # utility schemas
 #------------------------------------------------------------------------------
 
-help_schema = Or(basestring,  # single help entry
-                 [[basestring]])  # multiple help entries
+help_schema = Or(str,  # single help entry
+                 [[str]])  # multiple help entries
 
 _is_late = And(SourceCode, lambda x: hasattr(x, "_late"))
 
@@ -54,7 +54,7 @@ def late_bound(schema):
 
 # used when 'requires' is late bound
 late_requires_schema = Schema([
-    Or(PackageRequest, And(basestring, Use(PackageRequest)))
+    Or(PackageRequest, And(str, Use(PackageRequest)))
 ])
 
 
@@ -66,7 +66,7 @@ late_requires_schema = Schema([
 #
 
 base_resource_schema_dict = {
-    Required("name"):                   basestring
+    Required("name"):                   str
 }
 
 
@@ -80,12 +80,12 @@ package_family_schema_dict = base_resource_schema_dict.copy()
 #
 
 tests_schema = Schema({
-    Optional(basestring): Or(
-        Or(basestring, [basestring]),
+    Optional(str): Or(
+        Or(str, [str]),
         {
-            "command": Or(basestring, [basestring]),
+            "command": Or(str, [str]),
             Optional("requires"): [
-                Or(PackageRequest, And(basestring, Use(PackageRequest)))
+                Or(PackageRequest, And(str, Use(PackageRequest)))
             ]
         }
     )
@@ -94,10 +94,10 @@ tests_schema = Schema({
 package_base_schema_dict = base_resource_schema_dict.copy()
 package_base_schema_dict.update({
     # basics
-    Optional("base"):                   basestring,
+    Optional("base"):                   str,
     Optional("version"):                Version,
-    Optional('description'):            basestring,
-    Optional('authors'):                [basestring],
+    Optional('description'):            str,
+    Optional('authors'):                [str],
 
     # dependencies
     Optional('requires'):               late_bound([PackageRequest]),
@@ -106,12 +106,12 @@ package_base_schema_dict.update({
 
     # plugins
     Optional('has_plugins'):            late_bound(bool),
-    Optional('plugin_for'):             late_bound([basestring]),
+    Optional('plugin_for'):             late_bound([str]),
 
     # general
-    Optional('uuid'):                   basestring,
+    Optional('uuid'):                   str,
     Optional('config'):                 Config,
-    Optional('tools'):                  late_bound([basestring]),
+    Optional('tools'):                  late_bound([str]),
     Optional('help'):                   late_bound(help_schema),
 
     # testing
@@ -125,14 +125,14 @@ package_base_schema_dict.update({
     # release info
     Optional("timestamp"):              int,
     Optional('revision'):               object,
-    Optional('changelog'):              basestring,
-    Optional('release_message'):        Or(None, basestring),
+    Optional('changelog'):              str,
+    Optional('release_message'):        Or(None, str),
     Optional('previous_version'):       Version,
     Optional('previous_revision'):      object,
-    Optional('vcs'):                    basestring,
+    Optional('vcs'):                    str,
 
     # arbitrary fields
-    Optional(basestring):               late_bound(object)
+    Optional(str):               late_bound(object)
 })
 
 
@@ -167,23 +167,23 @@ variant_schema = Schema(variant_schema_dict)
 
 _commands_schema = Or(SourceCode,       # commands as converted function
                       callable,         # commands as function
-                      basestring,       # commands in text block
-                      [basestring])     # old-style (rez-1) commands
+                      str,       # commands in text block
+                      [str])     # old-style (rez-1) commands
 
 _function_schema = Or(SourceCode, callable)
 
-_package_request_schema = And(basestring, Use(PackageRequest))
+_package_request_schema = And(str, Use(PackageRequest))
 
 package_pod_schema_dict = base_resource_schema_dict.copy()
 
-large_string_dict = And(basestring, Use(lambda x: dedent(x).strip()))
+large_string_dict = And(str, Use(lambda x: dedent(x).strip()))
 
 
 package_pod_schema_dict.update({
-    Optional("base"):                   basestring,
-    Optional("version"):                And(basestring, Use(Version)),
+    Optional("base"):                   str,
+    Optional("version"):                And(str, Use(Version)),
     Optional('description'):            large_string_dict,
-    Optional('authors'):                [basestring],
+    Optional('authors'):                [str],
 
     Optional('requires'):               late_bound([_package_request_schema]),
     Optional('build_requires'):         late_bound([_package_request_schema]),
@@ -193,12 +193,12 @@ package_pod_schema_dict.update({
     Optional('variants'):               [[_package_request_schema]],
 
     Optional('has_plugins'):            late_bound(bool),
-    Optional('plugin_for'):             late_bound([basestring]),
+    Optional('plugin_for'):             late_bound([str]),
 
-    Optional('uuid'):                   basestring,
+    Optional('uuid'):                   str,
     Optional('config'):                 And(dict,
                                             Use(lambda x: create_config(overrides=x))),
-    Optional('tools'):                  late_bound([basestring]),
+    Optional('tools'):                  late_bound([str]),
     Optional('help'):                   late_bound(help_schema),
 
     Optional('tests'):                  late_bound(tests_schema),
@@ -210,13 +210,13 @@ package_pod_schema_dict.update({
     Optional("timestamp"):              int,
     Optional('revision'):               object,
     Optional('changelog'):              large_string_dict,
-    Optional('release_message'):        Or(None, basestring),
-    Optional('previous_version'):       And(basestring, Use(Version)),
+    Optional('release_message'):        Or(None, str),
+    Optional('previous_version'):       And(str, Use(Version)),
     Optional('previous_revision'):      object,
-    Optional('vcs'):                    basestring,
+    Optional('vcs'):                    str,
 
     # arbitrary keys
-    Optional(basestring):               late_bound(object)
+    Optional(str):               late_bound(object)
 })
 
 
@@ -389,7 +389,7 @@ class PackageResourceHelper(PackageResource):
                 print_warning(msg)
             commands = convert_old_commands(commands)
 
-        if isinstance(commands, basestring):
+        if isinstance(commands, str):
             return SourceCode(source=commands)
         elif callable(commands):
             return SourceCode(func=commands)

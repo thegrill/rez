@@ -54,7 +54,7 @@ def _get_dependencies(requirement, distributions):
                 return dist.name.replace("-", "_")
 
     result = []
-    requirements = ([requirement] if isinstance(requirement, basestring)
+    requirements = ([requirement] if isinstance(requirement, str)
                     else requirement["requires"])
 
     for package in requirements:

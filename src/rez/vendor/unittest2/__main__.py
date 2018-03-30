@@ -6,5 +6,5 @@ if sys.argv[0].endswith("__main__.py"):
 
 __unittest = True
 
-from rez.vendor.unittest2.main import main_
+import unittest.main as main_
 main_()

@@ -37,7 +37,7 @@ class Client(object):
                 debugging - run 'memcached -vv' in the foreground to see the keys
                 being get/set/stored.
         """
-        self.servers = [servers] if isinstance(servers, basestring) else servers
+        self.servers = [servers] if isinstance(servers, str) else servers
         self.key_hasher = self._debug_key_hash if debug else self._key_hash
         self._client = None
         self.debug = debug

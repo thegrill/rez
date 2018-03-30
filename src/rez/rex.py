@@ -5,7 +5,6 @@ import subprocess
 import sys
 import pipes
 import re
-import UserDict
 import inspect
 import traceback
 from string import Formatter
@@ -733,7 +732,7 @@ class EscapedString(object):
         return "%s(%r)" % (self.__class__.__name__, self.strings)
 
     def __eq__(self, other):
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             return (str(self) == str(other))
         else:
             return (isinstance(other, EscapedString)
@@ -932,7 +931,7 @@ class NamespaceFormatter(Formatter):
 # Environment Classes
 #===============================================================================
 
-class EnvironmentDict(UserDict.DictMixin):
+class EnvironmentDict(dict):
     """
     Provides a mapping interface to `EnvironmentVariable` instances,
     which provide an object-oriented interface for recording environment
@@ -952,7 +951,7 @@ class EnvironmentDict(UserDict.DictMixin):
         """
         self.manager = manager
         self._var_cache = dict((k, EnvironmentVariable(k, self))
-                               for k in manager.parent_environ.iterkeys())
+                               for k in manager.parent_environ.keys())
 
     def keys(self):
         return self._var_cache.keys()
@@ -1175,7 +1174,7 @@ class RexExecutor(object):
                 if isinstance(code, SourceCode):
                     code.exec_(globals_=exec_namespace)
                 else:
-                    exec pyc in exec_namespace
+                    exec(pyc, globals=exec_namespace)
             except RexError:
                 raise
             except SourceCodeError as e:

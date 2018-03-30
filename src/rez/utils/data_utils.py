@@ -41,7 +41,7 @@ def deep_update(dict1, dict2):
         if isinstance(v, ModifyList):
             return v.apply([])
         elif isinstance(v, dict):
-            return dict((k, flatten(v_)) for k, v_ in v.iteritems())
+            return dict((k, flatten(v_)) for k, v_ in v.items())
         else:
             return v
 
@@ -57,7 +57,7 @@ def deep_update(dict1, dict2):
 
     """
     import copy
-    for k, v in dict2.iteritems():
+    for k, v in dict2.items():
         if k in dict1 and isinstance(v, dict) and isinstance(dict1[k], dict):
             deep_update(dict1[k], v)
         else:
@@ -67,11 +67,11 @@ def deep_update(dict1, dict2):
     """
 
     ### NEW
-    for k1, v1 in dict1.iteritems():
+    for k1, v1 in dict1.items():
         if k1 not in dict2:
             dict1[k1] = flatten(v1)
 
-    for k2, v2 in dict2.iteritems():
+    for k2, v2 in dict2.items():
         v1 = dict1.get(k2)
 
         if v1 is KeyError:
@@ -97,7 +97,7 @@ def get_dict_diff(d1, d2):
         removed = []
         changed = []
 
-        for k1, v1 in d1_.iteritems():
+        for k1, v1 in d1_.items():
             if k1 not in d2_:
                 removed.append(namespace + [k1])
             else:
@@ -112,7 +112,7 @@ def get_dict_diff(d1, d2):
                     else:
                         changed.append(namespace + [k1])
 
-        for k2 in d2_.iterkeys():
+        for k2 in d2_.keys():
             if k2 not in d1_:
                 added.append(namespace + [k2])
 
@@ -298,7 +298,7 @@ def convert_dicts(d, to_class=AttrDictWrapper, from_class=dict):
         Converted data as `to_class` instance.
     """
     d_ = to_class()
-    for key, value in d.iteritems():
+    for key, value in d.items():
         if isinstance(value, from_class):
             d_[key] = convert_dicts(value, to_class=to_class,
                                     from_class=from_class)
@@ -343,7 +343,7 @@ def get_object_completions(instance, prefix, types=None, instance_types=None):
     attrs = dir(instance)
     try:
         for attr in instance:
-            if isinstance(attr, basestring):
+            if isinstance(attr, str):
                 attrs.append(attr)
     except TypeError:
         pass
@@ -464,17 +464,16 @@ class LazyAttributeMeta(type):
     def __new__(cls, name, parents, members):
         def _defined(x):
             return x in members or any(hasattr(p, x) for p in parents)
-
         schema = members.get('schema')
         keys = set()
 
         if schema:
             schema_dict = schema._schema
-            for key, key_schema in schema_dict.iteritems():
+            for key, key_schema in schema_dict.items():
                 optional = isinstance(key, Optional)
                 while isinstance(key, Schema):
                     key = key._schema
-                if isinstance(key, basestring):
+                if isinstance(key, str):
                     keys.add(key)
 
                     if _defined(key):

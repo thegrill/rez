@@ -531,9 +531,9 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             item_separator = _item_separator
         first = True
         if _PY3:
-            iteritems = dct.items()
+            items = dct.items()
         else:
-            iteritems = dct.iteritems()
+            items = dct.items()
         if _item_sort_key:
             items = []
             for k, v in dct.items():
@@ -544,7 +544,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
                 items.append((k, v))
             items.sort(key=_item_sort_key)
         else:
-            items = iteritems
+            items = items
         for key, value in items:
             if not (_item_sort_key or isinstance(key, string_types)):
                 key = _stringify_key(key)

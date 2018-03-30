@@ -43,7 +43,7 @@ class PackageHelp(object):
 
         if package:
             help_ = package.help
-            if isinstance(help_, basestring):
+            if isinstance(help_, str):
                 sections = [["Help", help_]]
             elif isinstance(help_, list):
                 sections = help_

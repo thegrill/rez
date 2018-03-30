@@ -89,7 +89,7 @@ def extract_version(exepath, version_arg, word_index=-1, version_rank=3):
     Returns:
         `Version` object.
     """
-    if isinstance(version_arg, basestring):
+    if isinstance(version_arg, str):
         version_arg = [version_arg]
     args = [exepath] + version_arg
 

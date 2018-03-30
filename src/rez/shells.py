@@ -38,7 +38,7 @@ class Shell(ActionInterpreter):
     """
 
     schema_dict = {
-        "prompt": basestring}
+        "prompt": str}
 
     @classmethod
     def name(cls):
@@ -339,7 +339,7 @@ class UnixShell(Shell):
 
         cmd = []
         if pre_command:
-            if isinstance(pre_command, basestring):
+            if isinstance(pre_command, str):
                 cmd = pre_command.strip().split()
             else:
                 cmd = pre_command

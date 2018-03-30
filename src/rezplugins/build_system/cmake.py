@@ -50,9 +50,9 @@ class CMakeBuildSystem(BuildSystem):
     schema_dict = {
         "build_target":     Or(*build_targets),
         "build_system":     Or(*build_systems.keys()),
-        "cmake_args":       [basestring],
-        "cmake_binary":     Or(None, basestring),
-        "make_binary":     Or(None, basestring)}
+        "cmake_args":       [str],
+        "cmake_binary":     Or(None, str),
+        "make_binary":     Or(None, str)}
 
     @classmethod
     def name(cls):

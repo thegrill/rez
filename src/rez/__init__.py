@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+from . import utils
 from rez.utils._version import _rez_version
 import logging.config
 import atexit

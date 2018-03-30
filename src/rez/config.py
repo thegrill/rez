@@ -79,25 +79,25 @@ class Setting(object):
 
 
 class Str(Setting):
-    schema = Schema(basestring)
+    schema = Schema(str)
 
     def _parse_env_var(self, value):
         return value
 
 
 class Char(Setting):
-    schema = Schema(basestring, lambda x: len(x) == 1)
+    schema = Schema(str, lambda x: len(x) == 1)
 
     def _parse_env_var(self, value):
         return value
 
 
 class OptionalStr(Str):
-    schema = Or(None, basestring)
+    schema = Or(None, str)
 
 
 class StrList(Setting):
-    schema = Schema([basestring])
+    schema = Schema([str])
     sep = ','
 
     def _parse_env_var(self, value):
@@ -107,7 +107,7 @@ class StrList(Setting):
 
 class OptionalStrList(StrList):
     schema = Or(And(None, Use(lambda x: [])),
-                [basestring])
+                [str])
 
 
 class PathList(StrList):
@@ -349,8 +349,8 @@ config_schema = Schema({
 # settings common to each plugin type
 _plugin_config_dict = {
     "release_vcs": {
-        "tag_name":                     basestring,
-        "releasable_branches":          Or(None, [basestring]),
+        "tag_name":                     str,
+        "releasable_branches":          Or(None, [str]),
         "check_tag":                    bool
     }
 }
@@ -360,7 +360,7 @@ _plugin_config_dict = {
 # Config
 # -----------------------------------------------------------------------------
 
-class Config(object):
+class Config(object, metaclass=LazyAttributeMeta):
     """Rez configuration settings.
 
     You should call the `create_config` function, rather than constructing a
@@ -371,7 +371,7 @@ class Config(object):
     files update the master configuration to create the final config. See the
     comments at the top of 'rezconfig' for more details.
     """
-    __metaclass__ = LazyAttributeMeta
+    # __metaclass__ = LazyAttributeMeta
     schema = config_schema
     schema_error = ConfigurationError
 
@@ -385,6 +385,7 @@ class Config(object):
             locked: If True, settings overrides in environment variables are
                 ignored.
         """
+        # print('LAZYYYY ---------')
         self.filepaths = filepaths
         self._sourced_filepaths = None
         self.overrides = overrides or {}
@@ -512,7 +513,7 @@ class Config(object):
                 return _get_plugin_completions(prefix_)
             return []
         else:
-            keys = ([x for x in self._schema_keys if isinstance(x, basestring)]
+            keys = ([x for x in self._schema_keys if isinstance(x, str)]
                     + ["plugins"])
             keys = [x for x in keys if x.startswith(prefix)]
             if keys == ["plugins"]:
@@ -580,7 +581,7 @@ class Config(object):
         return Config(filepaths, overrides)
 
     def __str__(self):
-        keys = (x for x in self.schema._schema if isinstance(x, basestring))
+        keys = (x for x in self.schema._schema if isinstance(x, str))
         return "%r" % sorted(list(keys) + ["plugins"])
 
     def __repr__(self):
@@ -706,14 +707,14 @@ class _PluginConfigs(object):
 def expand_system_vars(data):
     """Expands any strings within `data` such as '{system.user}'."""
     def _expanded(value):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             value = expandvars(value)
             value = expanduser(value)
             return scoped_format(value, system=system)
         elif isinstance(value, (list, tuple, set)):
             return [_expanded(x) for x in value]
         elif isinstance(value, dict):
-            return dict((k, _expanded(v)) for k, v in value.iteritems())
+            return dict((k, _expanded(v)) for k, v in value.items())
         else:
             return value
     return _expanded(data)
@@ -769,12 +770,12 @@ def _load_config_py(filepath):
     with open(filepath) as f:
         try:
             code = compile(f.read(), filepath, 'exec')
-            exec_(code, _globs_=globs)
+            exec_(code, globs)
         except Exception as e:
             raise ConfigurationError("Error loading configuration from %s: %s"
                                      % (filepath, str(e)))
 
-    for k, v in globs.iteritems():
+    for k, v in globs.items():
         if k != '__builtins__' \
                 and not ismodule(v) \
                 and k not in reserved:

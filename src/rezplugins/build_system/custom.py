@@ -65,7 +65,7 @@ class CustomBuildSystem(BuildSystem):
         before_args = set(x.dest for x in parser._actions)
 
         try:
-            exec source in {"parser": parser}
+            exec(source, {"parser": parser})
         except Exception as e:
             print_warning("Error in ./parse_build_args.py: %s" % str(e))
 
@@ -115,7 +115,7 @@ class CustomBuildSystem(BuildSystem):
             install_ = "install" if install else ''
             return txt.format(root=root, install=install_).strip()
 
-        if isinstance(command, basestring):
+        if isinstance(command, str):
             if self.build_args:
                 command = command + ' ' + ' '.join(map(quote, self.build_args))
 
@@ -145,7 +145,7 @@ class CustomBuildSystem(BuildSystem):
                 # write args defined in ./parse_build_args.py out as env vars
                 extra_args = getattr(self.opts.parser, "_rezbuild_extra_args", [])
 
-                for key, value in vars(self.opts).iteritems():
+                for key, value in vars(self.opts).items():
                     if key in extra_args:
                         varname = "__PARSE_ARG_%s" % key.upper()
 

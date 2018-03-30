@@ -55,8 +55,8 @@ class ReadError(EnvironmentError):
     """Raised when an archive cannot be read"""
 
 class RegistryError(Exception):
-    """Raised when a registery operation with the archiving
-    and unpacking registeries fails"""
+    """Raised when a registry operation with the archiving
+    and unpacking registries fails"""
 
 
 try:
@@ -560,32 +560,32 @@ def make_archive(base_name, format, root_dir=None, base_dir=None, verbose=0,
     uses the current owner and group.
     """
     save_cwd = os.getcwd()
+    if root_dir is not None:
+        if logger is not None:
+            logger.debug("changing into '%s'", root_dir)
+        base_name = os.path.abspath(base_name)
+        if not dry_run:
+            os.chdir(root_dir)
+
+    if base_dir is None:
+        base_dir = os.curdir
+
+    kwargs = {'dry_run': dry_run, 'logger': logger}
+
     try:
-        if root_dir is not None:
-            if logger is not None:
-                logger.debug("changing into '%s'", root_dir)
-            base_name = os.path.abspath(base_name)
-            if not dry_run:
-                os.chdir(root_dir)
+        format_info = _ARCHIVE_FORMATS[format]
+    except KeyError:
+        raise ValueError("unknown archive format '%s'" % format)
 
-        if base_dir is None:
-            base_dir = os.curdir
+    func = format_info[0]
+    for arg, val in format_info[1]:
+        kwargs[arg] = val
 
-        kwargs = {'dry_run': dry_run, 'logger': logger}
+    if format != 'zip':
+        kwargs['owner'] = owner
+        kwargs['group'] = group
 
-        try:
-            format_info = _ARCHIVE_FORMATS[format]
-        except KeyError:
-            raise ValueError("unknown archive format '%s'" % format)
-
-        func = format_info[0]
-        for arg, val in format_info[1]:
-            kwargs[arg] = val
-
-        if format != 'zip':
-            kwargs['owner'] = owner
-            kwargs['group'] = group
-
+    try:
         filename = func(base_name, base_dir, **kwargs)
     finally:
         if root_dir is not None:
@@ -648,7 +648,7 @@ def register_unpack_format(name, extensions, function, extra_args=None,
     _UNPACK_FORMATS[name] = extensions, function, extra_args, description
 
 def unregister_unpack_format(name):
-    """Removes the pack format from the registery."""
+    """Removes the pack format from the registry."""
     del _UNPACK_FORMATS[name]
 
 def _ensure_directory(path):

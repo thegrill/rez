@@ -193,7 +193,7 @@ This file lists the changes in each six version.
 1.2.0
 -----
 
-- Issue #13: Make iterkeys/itervalues/iteritems return iterators on Python 3
+- Issue #13: Make keys/values/items return iterators on Python 3
   instead of iterables.
 
 - Issue #11: Fix maxsize support on Jython.

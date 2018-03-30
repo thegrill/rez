@@ -30,7 +30,7 @@ def read_graph_from_string(txt):
         return read_dot(txt)  # standard dot format
 
     def conv(value):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             return '"' + value + '"'
         else:
             return value
@@ -43,7 +43,7 @@ def read_graph_from_string(txt):
         attrs = [(k, conv(v)) for k, v in attrs]
 
         for value in values:
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 node_name = value
                 attrs_ = attrs
             else:
@@ -78,7 +78,7 @@ def write_compacted(g):
     d_edges = {}
 
     def conv(value):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             return value.strip('"')
         else:
             return value
@@ -167,7 +167,7 @@ def prune_graph(graph_str, package_name):
     g = read_dot(graph_str)
     nodes = set()
 
-    for node, attrs in g.node_attr.iteritems():
+    for node, attrs in g.node_attr.items():
         attr = [x for x in attrs if x[0] == "label"]
         if attr:
             label = attr[0][1]

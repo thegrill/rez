@@ -40,11 +40,11 @@ pets = dict(
 
 
 pet_schema = Schema({
-    Required("name"):       basestring,
-    Required("colors"):     And([basestring], Use(set)),
+    Required("name"):       str,
+    Required("colors"):     And([str], Use(set)),
     Required("male"):       bool,
     Required("age"):        float,
-    Optional("owner"):      basestring
+    Optional("owner"):      str
 })
 
 
@@ -233,7 +233,7 @@ class TestResources_(TestBase):
             # after full validation, each attrib should validate exactly once.
             # Those with value None are optional and missing attributes, so were
             # never validated.
-            expected_validations = dict((k, 1) for k, v in expected_data.iteritems()
+            expected_validations = dict((k, 1) for k, v in expected_data.items()
                                         if v is not None)
             self.assertEqual(resource.validations, expected_validations)
 

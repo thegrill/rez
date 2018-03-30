@@ -30,7 +30,7 @@ class PackageRepositoryResourceWrapper(ResourceWrapper, StringFormatMixin):
 
     def validated_data(self):
         data = ResourceWrapper.validated_data(self)
-        data = dict((k, v) for k, v in data.iteritems() if v is not None)
+        data = dict((k, v) for k, v in data.items() if v is not None)
         return data
 
 
@@ -476,7 +476,7 @@ def iter_packages(name, range_=None, paths=None):
 
             seen.add(key)
             if range_:
-                if isinstance(range_, basestring):
+                if isinstance(range_, str):
                     range_ = VersionRange(range_)
                 if package_resource.version not in range_:
                     continue
@@ -496,7 +496,7 @@ def get_package(name, version, paths=None):
     Returns:
         `Package` object, or None if the package was not found.
     """
-    if isinstance(version, basestring):
+    if isinstance(version, str):
         range_ = VersionRange("==%s" % version)
     else:
         range_ = VersionRange.from_version(version, "==")

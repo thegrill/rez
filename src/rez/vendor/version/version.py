@@ -634,10 +634,10 @@ class _VersionRangeParser(object):
             result = fn(self)
             if self.debug:
                 label = fn.__name__.replace("_act_", "")
-                print "%-21s: %s" % (label, self._input_string)
+                print("%-21s: %s" % (label, self._input_string))
                 for key, value in self._groups.items():
-                    print "    %-17s= %s" % (key, value)
-                print "    %-17s= %s" % ("bounds", self.bounds)
+                    print("    %-17s= %s" % (key, value))
+                print("    %-17s= %s" % ("bounds", self.bounds))
             return result
         return fn_
 

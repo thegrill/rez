@@ -37,7 +37,7 @@ from rez.backport.lru_cache import lru_cache
 from rez.utils.logging_ import print_debug
 
 
-class Resource(object):
+class Resource(object, metaclass=LazyAttributeMeta):
     """Abstract base class for a data resource.
 
     A resource is an object uniquely identified by a 'key' (the resource type),
@@ -70,7 +70,7 @@ class Resource(object):
         schema_error (Exception): The exception type to raise on key
             validation failure.
     """
-    __metaclass__ = LazyAttributeMeta
+    # __metaclass__ = LazyAttributeMeta
     key = None
     schema = None
     schema_error = Exception
