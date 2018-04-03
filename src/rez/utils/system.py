@@ -2,6 +2,8 @@ from contextlib import contextmanager
 import subprocess
 import sys
 
+VC_VARS_BAT = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\Auxiliary\\Build\\vcvars64.bat'
+
 
 @contextmanager
 def add_sys_paths(paths):
@@ -59,7 +61,8 @@ def popen(args, **kwargs):
             for f in files:
                 if f == 'build.make':
                     update_nmake_py_compile(os.path.join(root, f))
-        return subprocess.Popen('C:\\WINDOWS\\system32\\cmd.exe /C "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\Auxiliary\\Build\\vcvars64.bat' '"' f' && {args[-1]}',**kwargs)
+        # for the fix, replace args for a single string containing the execution of the VS dev prompt and the rez call
+        args = f'{args[0]} /C "{VC_VARS_BAT}" && {args[-1]}'
     return subprocess.Popen(args, **kwargs)
 
 
