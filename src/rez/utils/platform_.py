@@ -506,7 +506,7 @@ class WindowsPlatform(Platform):
         # N is the number of physical cores in the machine: this will be exactly one half the
         # number of logical cores (ie from multiprocessing.cpu_count) if HyperThreading is
         # enabled on the CPU(s)
-        result = re.findall(r'NumberOfCores=(\d+)', stdout.strip())
+        result = re.findall(rb'NumberOfCores=(\d+)', stdout.strip())
 
         if not result:
             # don't know what's wrong... should get back a result like:
