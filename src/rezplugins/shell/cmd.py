@@ -215,6 +215,11 @@ class CMD(Shell):
         cmd = cmd + [self.executable] + cmd_flags + ['call {}'.format(target_file)]
         is_detached = (cmd[0] == 'START')
 
+        # TODO: windows NMake uber hack start, sry
+        # https://github.com/nerdvegas/rez/issues/469
+        if command and ('nmake' in command or ('cmake' in command and '"NMake Makefiles"' in command)):
+            Popen_args['vs_dev_shell'] = True
+        # windows NMake uber hack end
         p = popen(cmd, env=env, shell=is_detached, **Popen_args)
         return p
 

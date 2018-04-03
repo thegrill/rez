@@ -75,6 +75,10 @@ class Shell(ActionInterpreter):
         self.settings = config.plugins.shell[self.name()]
 
     def _addline(self, line):
+        if 'set PATH=' in line:
+            # TODO: hack #32 for windows not inheriting proper environment. MOVE TO PROPER PLACE! (python pkg sets this)
+            # https://github.com/nerdvegas/rez/issues/469#issuecomment-358650129
+            line = line.replace('set PATH=', 'set PATH=%PATH%;')
         self._lines.append(line)
 
     def get_output(self, style=OutputStyle.file):
